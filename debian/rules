@@ -21,10 +21,10 @@ install: build
 		dh_testroot
 		dh_clean -k
 		dh_installdirs
-		$(MAKE) -C zlibrary/core TARGET_ARCH=desktop UI_TYPE=dummy DESTDIR=$(DEB_DIR)/fbreader do_install
-		$(MAKE) -C zlibrary/text TARGET_ARCH=desktop UI_TYPE=dummy DESTDIR=$(DEB_DIR)/fbreader do_install
-		$(MAKE) -C zlibrary/ui TARGET_ARCH=desktop UI_TYPE=qt4 DESTDIR=$(DEB_DIR)/fbreader do_install
-		$(MAKE) -C fbreader TARGET_ARCH=desktop UI_TYPE=dummy DESTDIR=$(DEB_DIR)/fbreader do_install
+		$(MAKE) -C zlibrary/core TARGET_ARCH=desktop UI_TYPE=dummy DESTDIR=$(DEB_DIR)/qtmoko-fbreader do_install
+		$(MAKE) -C zlibrary/text TARGET_ARCH=desktop UI_TYPE=dummy DESTDIR=$(DEB_DIR)/qtmoko-fbreader do_install
+		$(MAKE) -C zlibrary/ui TARGET_ARCH=desktop UI_TYPE=qt4 DESTDIR=$(DEB_DIR)/qtmoko-fbreader do_install
+		$(MAKE) -C fbreader TARGET_ARCH=desktop UI_TYPE=dummy DESTDIR=$(DEB_DIR)/qtmoko-fbreader do_install
 		touch install-stamp
 
 binary-arch: VERSION=$(shell expr "`dpkg-parsechangelog |grep Version:`" : '.*Version: \(.*\)')
@@ -34,13 +34,13 @@ binary-arch: build install
 		dh_strip
 		dh_compress
 		dh_fixperms
-		rm -rf debian/fbreader/usr
-		mkdir -p debian/fbreader/opt/qtmoko/apps/Applications/
-		cp fbreader.desktop debian/fbreader/opt/qtmoko/apps/Applications/
-		mkdir -p debian/fbreader/opt/qtmoko/pics/fbreader
-		cp debian/fbreader/opt/qtmoko/share/pixmaps/FBReader.png debian/fbreader/opt/qtmoko/pics/fbreader
-		mkdir -p debian/fbreader/home/root/.FBReader
-		cp ui.xml debian/fbreader/home/root/.FBReader
+		rm -rf debian/qtmoko-fbreader/usr
+		mkdir -p debian/qtmoko-fbreader/opt/qtmoko/apps/Applications/
+		cp fbreader.desktop debian/qtmoko-fbreader/opt/qtmoko/apps/Applications/
+		mkdir -p debian/qtmoko-fbreader/opt/qtmoko/pics/fbreader
+		cp debian/qtmoko-fbreader/opt/qtmoko/share/pixmaps/FBReader.png debian/qtmoko-fbreader/opt/qtmoko/pics/fbreader
+		mkdir -p debian/qtmoko-fbreader/home/root/.FBReader
+		cp ui.xml debian/qtmoko-fbreader/home/root/.FBReader
 		dh_makeshlibs -plibzlcore -V"libzlcore (>= $(VERSION)),libzlcore(<< 0.13.0)"
 		dh_makeshlibs -plibzltext -V"libzltext (>= $(VERSION)),libzltext(<< 0.13.0)"
 		dh_installdeb
