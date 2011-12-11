@@ -60,7 +60,6 @@ ZLQtApplicationWindow::LineEditParameter::LineEditParameter(QToolBar *toolbar, Z
 	myEdit->setMaxLength(textFieldItem.maxWidth());
 	myEdit->setFixedWidth(textFieldItem.maxWidth() * 10 + 10);
 	myEdit->setFocusPolicy(Qt::ClickFocus);
-	myEdit->setToolTip(QString::fromUtf8(textFieldItem.tooltip().c_str()));
 	myAction = toolbar->addWidget(myEdit);
 	// I don't understand why this code does work but it does.
 	//QBoxLayout *layout = (QBoxLayout*)toolbar->layout();

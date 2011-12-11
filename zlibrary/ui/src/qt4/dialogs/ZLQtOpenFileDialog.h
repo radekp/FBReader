@@ -22,8 +22,6 @@
 
 #include "../../../../core/src/desktop/dialogs/ZLDesktopOpenFileDialog.h"
 
-class QFileDialog;
-
 class ZLQtOpenFileDialog : public ZLDesktopOpenFileDialog {
 
 public:
@@ -40,9 +38,9 @@ public:
 	int y() const;
 	int width() const;
 	int height() const;
-
 private:
-	QFileDialog *myDialog;
+    QString directory;
+    QString file;
 };
 
 #endif /* __ZLQTOPENFILEDIALOG_H__ */

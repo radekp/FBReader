@@ -20,7 +20,6 @@
 #include <unistd.h>
 
 #include <QtGui/QApplication>
-#include <QtGui/QCursor>
 #include <QtGui/QDesktopWidget>
 #include <QtGui/QWidget>
 #include <QtGui/QLabel>
@@ -55,12 +54,9 @@ ZLQtWaitMessage::ZLQtWaitMessage(const std::string &message) : QWidget(0, Qt::Sp
 	QWidget *main = qApp->activeWindow();
 	if (main != 0) {
 		myMainWidget = main;
-		myStoredCursor = main->cursor();
-		myMainWidget->setCursor(Qt::WaitCursor);
 	} else {
 		myMainWidget = 0;
 	}
-	setCursor(Qt::WaitCursor);
 
 	qApp->processEvents();
 
@@ -83,7 +79,4 @@ ZLQtWaitMessage::ZLQtWaitMessage(const std::string &message) : QWidget(0, Qt::Sp
 }
 
 ZLQtWaitMessage::~ZLQtWaitMessage() {
-	if (myMainWidget != 0) {
-		myMainWidget->setCursor(myStoredCursor);
-	}
 }

@@ -23,7 +23,6 @@
 #include <string>
 
 #include <QtGui/QWidget>
-#include <QtGui/QCursor>
 
 #include <ZLProgressDialog.h>
 
@@ -52,7 +51,6 @@ public:
 	~ZLQtWaitMessage();
 
 private:
-	QCursor myStoredCursor;
 	QWidget *myMainWidget;
 	QLayout *myLayout;
 	QLabel *myLabel;

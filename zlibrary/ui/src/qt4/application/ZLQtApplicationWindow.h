@@ -24,9 +24,7 @@
 
 #include <QtGui/QMainWindow>
 #include <QtGui/QAction>
-#include <QtGui/QCursor>
 
-class QDockWidget;
 class QToolBar;
 class QToolButton;
 class QLineEdit;
@@ -44,6 +42,9 @@ public:
 
 	void setFocusToMainWidget();
 
+protected:
+    bool event(QEvent *);
+    
 private:
 	ZLViewWidget *createViewWidget();
 	void addToolbarItem(ZLToolbar::ItemPtr item);
@@ -70,7 +71,6 @@ private:
 private:
 	QToolBar *myWindowToolBar;
 	QToolBar *myFullscreenToolBar;
-	QDockWidget *myDocWidget;
 	QToolBar *toolbar(ToolbarType type) { return (type == WINDOW_TOOLBAR) ? myWindowToolBar : myFullscreenToolBar; }
 
 friend class ZLQtToolBarAction;
@@ -82,7 +82,6 @@ friend class ZLQtToolBarAction;
 	bool myWasMaximized;
 
 	bool myCursorIsHyperlink;
-	QCursor myStoredCursor;
 
 private:
 	class LineEditParameter : public VisualParameter {

@@ -27,8 +27,8 @@
 #include <QtGui/QToolButton>
 #include <QtGui/QLayout>
 #include <QtGui/QWheelEvent>
-#include <QtGui/QDockWidget>
 #include <QtCore/QObjectList>
+#include <QSoftMenuBar>
 
 #include <ZLibrary.h>
 #include <ZLPopupData.h>
@@ -67,7 +67,6 @@ void ZLQtApplicationWindow::setToggleButtonState(const ZLToolbar::ToggleButtonIt
 ZLQtApplicationWindow::ZLQtApplicationWindow(ZLApplication *application) :
 	ZLDesktopApplicationWindow(application),
 	myFullscreenToolBar(0),
-	myDocWidget(0),
 	myFullScreen(false),
 	myWasMaximized(false),
 	myCursorIsHyperlink(false) {
@@ -89,11 +88,11 @@ ZLQtApplicationWindow::ZLQtApplicationWindow(ZLApplication *application) :
 		myFullscreenToolBar->hide();
 	}
 
-	resize(myWidthOption.value(), myHeightOption.value());
-	move(myXOption.value(), myYOption.value());
+	//resize(myWidthOption.value(), myHeightOption.value());
+	//move(myXOption.value(), myYOption.value());
 
 	menuBar()->hide();
-	show();
+    showMaximized();
 }
 
 void ZLQtApplicationWindow::init() {
@@ -140,31 +139,17 @@ void ZLQtApplicationWindow::setFullscreen(bool fullscreen) {
 	}
 	myFullScreen = fullscreen;
 	if (myFullScreen) {
+        setWindowFlags(windowFlags() | Qt::WindowStaysOnTopHint);
+        setWindowState(Qt::WindowFullScreen);
+        raise();
 		myWasMaximized = isMaximized();
 		myWindowToolBar->hide();
-		showFullScreen();
 		if (myFullscreenToolBar != 0) {
-			if (myDocWidget == 0) {
-				myDocWidget = new QDockWidget(this);
-				myDocWidget->setWidget(myFullscreenToolBar);
-				myDocWidget->setFloating(true);
-				myDocWidget->setAllowedAreas(Qt::NoDockWidgetArea);
-			}
-			myDocWidget->show();
 			myFullscreenToolBar->show();
-			myDocWidget->setMinimumSize(myDocWidget->size());
-			myDocWidget->setMaximumSize(myDocWidget->size());
 		}
 	} else {
 		myWindowToolBar->show();
-		showNormal();
-		if (myWasMaximized) {
-			showMaximized();
-		}
-		if (myDocWidget != 0) {
-			//myFullscreenToolBar->hide();
-			myDocWidget->hide();
-		}
+		showMaximized();
 	}
 }
 
@@ -197,12 +182,14 @@ void ZLQtApplicationWindow::closeEvent(QCloseEvent *event) {
 void ZLQtApplicationWindow::addToolbarItem(ZLToolbar::ItemPtr item) {
 	QToolBar *tb = toolbar(type(*item));
 	QAction *action = 0;
+    QMenu *menu = QSoftMenuBar::menuFor(this);
 
 	switch (item->type()) {
 		case ZLToolbar::Item::PLAIN_BUTTON:
 		case ZLToolbar::Item::TOGGLE_BUTTON:
 			action = new ZLQtToolBarAction(this, (ZLToolbar::AbstractButtonItem&)*item);
 			tb->addAction(action);
+            menu->addAction(action);
 			break;
 		case ZLToolbar::Item::MENU_BUTTON:
 		{
@@ -283,6 +270,21 @@ void ZLQtApplicationWindow::processAllEvents() {
 	qApp->processEvents();
 }
 
+bool ZLQtApplicationWindow::event(QEvent *event) {
+    if(event->type() == QEvent::WindowDeactivate)
+    {
+        lower();
+    }
+    else if(event->type() == QEvent::WindowActivate)
+    {
+        QString title = windowTitle();
+        setWindowTitle(QLatin1String("_allow_on_top_"));
+        raise();
+        setWindowTitle(title);
+    }
+    return QWidget::event(event);
+}
+
 ZLViewWidget *ZLQtApplicationWindow::createViewWidget() {
 	ZLQtViewWidget *viewWidget = new ZLQtViewWidget(this, &application());
 	setCentralWidget(viewWidget->widget());
@@ -306,12 +308,6 @@ void ZLQtApplicationWindow::setHyperlinkCursor(bool hyperlink) {
 		return;
 	}
 	myCursorIsHyperlink = hyperlink;
-	if (hyperlink) {
-		myStoredCursor = cursor();
-		setCursor(Qt::PointingHandCursor);
-	} else {
-		setCursor(myStoredCursor);
-	}
 }
 
 void ZLQtApplicationWindow::setFocusToMainWidget() {

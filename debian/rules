@@ -1,0 +1,54 @@
+#!/usr/bin/make -f
+
+clean: unpatch
+		dh_testdir
+		dh_testroot
+		[ ! -f Makefile ] || $(MAKE) distclean
+		dh_clean build-stamp install-stamp
+
+build: patch build-stamp
+build-stamp:
+		dh_testdir
+		$(MAKE) -C zlibrary/core TARGET_ARCH=desktop UI_TYPE=dummy
+		$(MAKE) -C zlibrary/text TARGET_ARCH=desktop UI_TYPE=dummy
+		$(MAKE) -C zlibrary/ui TARGET_ARCH=desktop UI_TYPE=qt4
+		$(MAKE) -C fbreader TARGET_ARCH=desktop UI_TYPE=dummy
+		touch build-stamp 
+
+install: DEB_DIR = $(CURDIR)/debian
+install: build
+		dh_testdir
+		dh_testroot
+		dh_clean -k
+		dh_installdirs
+		$(MAKE) -C zlibrary/core TARGET_ARCH=desktop UI_TYPE=dummy DESTDIR=$(DEB_DIR)/fbreader do_install
+		$(MAKE) -C zlibrary/text TARGET_ARCH=desktop UI_TYPE=dummy DESTDIR=$(DEB_DIR)/fbreader do_install
+		$(MAKE) -C zlibrary/ui TARGET_ARCH=desktop UI_TYPE=qt4 DESTDIR=$(DEB_DIR)/fbreader do_install
+		$(MAKE) -C fbreader TARGET_ARCH=desktop UI_TYPE=dummy DESTDIR=$(DEB_DIR)/fbreader do_install
+		touch install-stamp
+
+binary-arch: VERSION=$(shell expr "`dpkg-parsechangelog |grep Version:`" : '.*Version: \(.*\)')
+binary-arch: build install
+		dh_testdir
+		dh_testroot
+		dh_strip
+		dh_compress
+		dh_fixperms
+		rm -rf debian/fbreader/usr
+		mkdir -p debian/fbreader/opt/qtmoko/apps/Applications/
+		cp fbreader.desktop debian/fbreader/opt/qtmoko/apps/Applications/
+		mkdir -p debian/fbreader/opt/qtmoko/pics/fbreader
+		cp debian/fbreader/opt/qtmoko/share/pixmaps/FBReader.png debian/fbreader/opt/qtmoko/pics/fbreader
+		mkdir -p debian/fbreader/home/root/.FBReader
+		cp ui.xml debian/fbreader/home/root/.FBReader
+		dh_makeshlibs -plibzlcore -V"libzlcore (>= $(VERSION)),libzlcore(<< 0.13.0)"
+		dh_makeshlibs -plibzltext -V"libzltext (>= $(VERSION)),libzltext(<< 0.13.0)"
+		dh_installdeb
+#		dh_shlibdeps -l debian/libzlcore/usr/lib:debian/libzltext/usr/lib
+		dh_gencontrol
+		dh_md5sums
+		dh_builddeb
+
+binary:	binary-arch
+
+include /usr/share/quilt/quilt.make

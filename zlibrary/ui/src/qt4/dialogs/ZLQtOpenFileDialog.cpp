@@ -17,54 +17,130 @@
  * 02110-1301, USA.
  */
 
-#include <QtGui/QFileDialog>
+//#include <QtGui/QFileDialog>
 
+#include <QDir>
+#include <QDebug>
+#include <QInputDialog>
+#include <QVBoxLayout>
+#include <QList>
+#include <QPushButton>
+#include <QMessageBox>
 #include "ZLQtOpenFileDialog.h"
 
-ZLQtOpenFileDialog::ZLQtOpenFileDialog(const std::string &title, const std::string &directoryPath, const std::string &filePath, const Filter &filter) {
-	myDialog = new QFileDialog();
-	myDialog->setWindowTitle(QString::fromUtf8(title.c_str()));
-	myDialog->setDirectory(QString::fromUtf8(directoryPath.c_str()));
-	myDialog->selectFile(QString::fromUtf8(filePath.c_str()));
+ZLQtOpenFileDialog::ZLQtOpenFileDialog(const std::string &title, const std::string &directoryPath, const std::string &filePath, const Filter &filter)
+: directory(), file()
+{
 }
 
 ZLQtOpenFileDialog::~ZLQtOpenFileDialog() {
-	delete myDialog;
+	//delete myDialog;
 }
 
 bool ZLQtOpenFileDialog::runInternal() {
-	return myDialog->exec();
+    QString path("/");
+    int i = 1;
+    for(;;)
+    {
+        QDir dir(path);
+        QFileInfoList list = dir.entryInfoList(QDir::AllEntries, QDir::Name);
+
+        if(list.count() == 0)
+        {
+            qDebug() << "return true, dir=" << directory << ", file=" << file;
+            return true;
+        }
+        
+        QString text = path + "\n\n";
+        for(int j = i - 8; j < list.count(); j++)
+        {
+            if(j < 0)
+            {
+                j = 0;
+            }
+            QFileInfo fi = list.at(j);
+            if(i == j)
+            {
+                text += "-> ";
+            }
+            else
+            {
+                text += "     ";
+            }
+            if(j == 0)
+            {
+                text += "..... cancel";
+            }
+            else
+            {
+                text += fi.fileName();
+            }
+            text += "\n";
+        }
+        
+        int val = QMessageBox::question(NULL, "Open book",
+                                    text,
+                                    "^",
+                                    "v",
+                                    "Select", 0, 2);
+       if(val == 0 && i > 0)
+       {
+           i--;
+       }
+       if(val == 1 && i + 1 < list.count())
+       {
+           i++;
+       }
+       if(val == 2)
+       {
+           if(i == 0)
+           {
+               return false;    // cancel
+           }
+           QFileInfo fi = list.at(i);
+           file = fi.fileName();
+           directory = path;
+           if(path.length() > 1)
+           {
+               path += "/";
+           }
+           path += file;
+           i = 1;
+       }
+    }
 }
 
 std::string ZLQtOpenFileDialog::filePath() const {
-	QStringList paths = myDialog->selectedFiles();
-	return paths.size() > 0 ? (const char*)paths[0].toUtf8() : std::string();
+    qDebug() << "file=" << file;
+    QString res = directory + "/" + file;
+	return (const char*)res.toUtf8();
 }
 
 std::string ZLQtOpenFileDialog::directoryPath() const {
-	return (const char*)myDialog->directory().absolutePath().toUtf8();
+    qDebug() << "directory=" << directory;
+	return (const char*)directory.toUtf8();
 }
 
 void ZLQtOpenFileDialog::setPosition(int x, int y) {
-	myDialog->move(x, y);
+	
 }
 
 void ZLQtOpenFileDialog::setSize(int width, int height) {
-	myDialog->resize(width, height);
+	
 }
 
 int ZLQtOpenFileDialog::x() const {
-	return myDialog->x();
+	
 }
 
 int ZLQtOpenFileDialog::y() const {
-	return myDialog->y();
+	
 }
 
 int ZLQtOpenFileDialog::width() const {
-	return myDialog->width();
+	
 }
 
 int ZLQtOpenFileDialog::height() const {
-	return myDialog->height();
+	
 }

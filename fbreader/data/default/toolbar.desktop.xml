@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <toolbar>
+	<menuButton id="preferences"/>
+    <menuButton id="toggleFullscreen"/>
+	<separator/>
 	<button id="showReading"/>
 	<separator/>
 	<toggleButton id="byAuthor" group="booksOrder" default="yes"/>
@@ -23,11 +26,10 @@
 	<button id="findPrevious"/>
 	<button id="findNext"/>
 	<separator/>
-	<menuButton id="preferences"/>
-	<separator/>
 	<button id="rotate"/>
 	<separator/>
 	<button id="showHelp"/>
+	<button id="quit"/>
 	<!--
 	<fillSeparator/>
 	<searchField id="filterLibrary" parameterId="libraryFilter" maxWidth="15"/>

@@ -18,6 +18,7 @@
  */
 
 #include <QtGui/QApplication>
+#include <qtopiaapplication.h>
 
 #include <ZLApplication.h>
 #include <ZLibrary.h>
@@ -48,8 +49,10 @@ void initLibrary() {
 	new ZLQtLibraryImplementation();
 }
 
+QtopiaApplication *a;
+
 void ZLQtLibraryImplementation::init(int &argc, char **&argv) {
-	new QApplication(argc, argv);
+	a = new QtopiaApplication(argc, argv);
 
 	ZLibrary::parseArguments(argc, argv);
 
@@ -75,6 +78,7 @@ void ZLQtLibraryImplementation::run(ZLApplication *application) {
 	}
 	ZLDialogManager::Instance().createApplicationWindow(application);
 	application->initWindow();
-	qApp->exec();
+	//qApp->exec();
+    a->exec();
 	delete application;
 }
