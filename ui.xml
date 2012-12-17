@@ -24,7 +24,7 @@
     <option name="Base:alignment" value="1"/>
     <option name="Base:fontFamily" value="DejaVu Sans"/>
     <option name="Base:fontSize" value="7"/>
-    <option name="Base:lineSpacingPercent" value="200"/>
+    <option name="Base:lineSpacingPercent" value="300"/>
   </group>
   <group name="ToggleButtonGroup">
     <option name="booksOrder" value="byAuthor"/>

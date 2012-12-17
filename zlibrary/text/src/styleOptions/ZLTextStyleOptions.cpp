@@ -62,7 +62,7 @@ void ZLTextFontFamilyWithBaseOptionEntry::onAccept(const std::string &value) {
 
 ZLTextLineSpacingOptionEntry::ZLTextLineSpacingOptionEntry(ZLDoubleOption &option, const ZLResource &resource, bool allowBase) : myResource(resource), myOption(option), myAllowBase(allowBase) {
 	if (ourAllValuesPlusBase.empty()) {
-		for (int i = 5; i <= 20; ++i) {
+		for (int i = 5; i <= 40; ++i) {
 			ourAllValues.push_back(std::string() + (char)(i / 10 + '0') + '.' + (char)(i % 10 + '0'));
 		}
 		ourAllValuesPlusBase.push_back(myResource[KEY_UNCHANGED].value());
@@ -80,7 +80,7 @@ const std::string &ZLTextLineSpacingOptionEntry::initialValue() const {
 	if (value == 0) {
 		return ourAllValuesPlusBase[0];
 	}
-	for (int i = 5; i < 20; ++i) {
+	for (int i = 5; i < 40; ++i) {
 		if (value <= i) {
 			return ourAllValues[i - 5];
 		}
@@ -92,7 +92,7 @@ void ZLTextLineSpacingOptionEntry::onAccept(const std::string &value) {
 	if (value == ourAllValuesPlusBase[0]) {
 		myOption.setValue(0.0);
 	} else {
-		for (int i = 5; i <= 20; ++i) {
+		for (int i = 5; i <= 40; ++i) {
 			if (value == ourAllValues[i - 5]) {
 				myOption.setValue(i / 10.0);
 			}
@@ -102,7 +102,7 @@ void ZLTextLineSpacingOptionEntry::onAccept(const std::string &value) {
 
 ZLTextLineSpaceOptionEntry::ZLTextLineSpaceOptionEntry(ZLIntegerOption &option, const ZLResource &resource, bool allowBase) : myResource(resource), myOption(option), myAllowBase(allowBase) {
 	if (ourAllValuesPlusBase.empty()) {
-		for (int i = 5; i <= 20; ++i) {
+		for (int i = 5; i <= 40; ++i) {
 			ourAllValues.push_back(std::string() + (char)(i / 10 + '0') + '.' + (char)(i % 10 + '0'));
 		}
 		ourAllValuesPlusBase.push_back(myResource[KEY_UNCHANGED].value());
@@ -128,7 +128,7 @@ void ZLTextLineSpaceOptionEntry::onAccept(const std::string &value) {
 	if (value == ourAllValuesPlusBase[0]) {
 		myOption.setValue(-1);
 	} else {
-		for (int i = 5; i <= 20; ++i) {
+		for (int i = 5; i <= 40; ++i) {
 			if (value == ourAllValues[i - 5]) {
 				myOption.setValue(10 * i);
 				break;

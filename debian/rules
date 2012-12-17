@@ -41,6 +41,8 @@ binary-arch: build install
 		cp debian/qtmoko-fbreader/opt/qtmoko/share/pixmaps/FBReader.png debian/qtmoko-fbreader/opt/qtmoko/pics/fbreader
 		mkdir -p debian/qtmoko-fbreader/home/root/.FBReader
 		cp ui.xml debian/qtmoko-fbreader/home/root/.FBReader
+		cp fbreader/data/icons/filetree/22x22-transparent-png/palm.png debian/qtmoko-fbreader/opt/qtmoko/share/pixmaps/FBReader/toggleFullscreen.png
+		cp fbreader/data/icons/filetree/22x22-transparent-png/upfolder.png debian/qtmoko-fbreader/opt/qtmoko/share/pixmaps/FBReader/quit.png
 		dh_makeshlibs -plibzlcore -V"libzlcore (>= $(VERSION)),libzlcore(<< 0.13.0)"
 		dh_makeshlibs -plibzltext -V"libzltext (>= $(VERSION)),libzltext(<< 0.13.0)"
 		dh_installdeb
