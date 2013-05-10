@@ -17,6 +17,8 @@
  * 02110-1301, USA.
  */
 
+#include <qtopiaapplication.h>
+
 #include <QtGui/QApplication>
 #include <QtGui/QPixmap>
 #include <QtGui/QImage>
@@ -90,6 +92,8 @@ ZLQtApplicationWindow::ZLQtApplicationWindow(ZLApplication *application) :
 
 	//resize(myWidthOption.value(), myHeightOption.value());
 	//move(myXOption.value(), myYOption.value());
+
+	QtopiaApplication::instance()->setMainWidget(this);
 
 	menuBar()->hide();
     showMaximized();
