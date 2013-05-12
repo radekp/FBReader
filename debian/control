@@ -9,7 +9,7 @@ Package: qtmoko-fbreader
 Priority: optional
 Architecture: any
 Replaces: fbreader-gtk, fbreader-qt, fbreader-qt4
-Depends: libbz2-1.0, liblinebreak2, libfribidi0, libc6 (>= 2.4), libcurl3-gnutls (>= 7.16.2-1), libexpat1 (>= 1.95.8), libgcc1 (>= 1:4.4.0), libstdc++6 (>= 4.4.0), zlib1g (>= 1:1.1.4)
+Depends: libbz2-1.0, liblinebreak2, libcurl3, libfribidi0, libc6 (>= 2.4), libcurl3-gnutls (>= 7.16.2-1), libexpat1 (>= 1.95.8), libgcc1 (>= 1:4.4.0), libstdc++6 (>= 4.4.0), zlib1g (>= 1:1.1.4)
 Description: e-book reader
  FBReader is an e-book reader.
  .
